@@ -1,14 +1,63 @@
 import random
 import time
+import matplotlib.pyplot as plt
+import numpy as np
 
-def generateRandomArray(size, maxVal):
-    pass
+def generateRandomArray(size: int, maxVal: int) -> list[int]:
+    return [random.randint(1, maxVal) for i in range(size)]
 
-def insertionSort(arr, left, right):
-    pass
+def insertionSort(arr: list[int], left: int, right: int) -> None:
+    # global comparisons variable -> track comparisons across the sorting algorithms
+    global comparisons
 
-def merge():
-    pass
+    for i in range(left + 1, right + 1):
+        key = arr[i]
+        j = i -1
+
+        while j >= left:
+            comparisons += 1
+
+            if arr[j] <= key:
+                break
+
+            arr[j + 1] = arr[j]
+            j -= 1
+        
+        arr[j + 1] = key
+
+def merge(arr: list[int], left: int, mid: int, right: int) -> None:
+    # global comparisons variable -> track comparisons across the sorting algorithms
+    global comparisons
+
+    # create temporary arrays for left and right subarrays
+    leftArr = arr[left:mid + 1]
+    rightArr = arr[mid + 1: right + 1]
+
+    # merge the temporary arrays back into arr[left...right]
+    i = j = 0 # initialise indexes of the left and right subarrays
+    k = left # initialise index of merged subarray
+
+    while i < len(leftArr) and j < len(rightArr):
+        comparisons += 1
+        if leftArr[i] <= rightArr[j]:
+            arr[k] = leftArr[i]
+            i += 1
+        else:
+            arr[k] = rightArr[j]
+            j += 1
+        k += 1 
+
+    # copy remaining elements of leftArr, if any
+    while i < len(leftArr):
+        arr[k] = leftArr[i]
+        i += 1
+        k += 1
+
+    # copy remaining elements of rightArr, if any
+    while j < len(rightArr):
+        arr[k] = rightArr[j]
+        j += 1
+        k += 1
 
 def hybridSort(arr, left, right, s):
     pass
@@ -44,8 +93,8 @@ def main():
     duration = end - start
 
     # print results
-    print("Time taken: " + duration)
-    print("Number of comparisons: " + comparisons)
+    print("Time taken: ", duration)
+    print("Number of comparisons: ", comparisons)
 
 
 if __name__ == "main":
