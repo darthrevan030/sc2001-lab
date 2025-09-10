@@ -3,6 +3,8 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
+comparisons = 0
+
 def generateRandomArray(size: int, maxVal: int) -> list[int]:
     return [random.randint(1, maxVal) for i in range(size)]
 
@@ -66,7 +68,6 @@ def main():
 
     # global comparisons variable -> track comparisons across the sorting algorithms
     global comparisons
-    comparisons = 0
 
     # use system time for random seed to reduce chances of same random number being generated
     random.seed(int(time.time()))
@@ -95,6 +96,7 @@ def main():
     duration = (end - start)
 
     # print results
+    print(f"Sorted Array: {arr}")
     print(f"Time taken: {duration} seconds")
     print("Number of comparisons: ", comparisons)
 
