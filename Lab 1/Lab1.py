@@ -66,6 +66,7 @@ def main():
 
     # global comparisons variable -> track comparisons across the sorting algorithms
     global comparisons
+    comparisons = 0
 
     # use system time for random seed to reduce chances of same random number being generated
     random.seed(int(time.time()))
@@ -84,20 +85,21 @@ def main():
     start = time.perf_counter()
 
     # call hybrid sort algorithm
-    hybridSort(arr, 0, len(arr)-1, 2)
+    # hybridSort(arr, 0, len(arr)-1, 2)
+    insertionSort(arr, 0, len(arr)-1)
 
     # stop tracking time
     end = time.perf_counter()
 
     # calculate time taken
-    duration = end - start
+    duration = (end - start)
 
     # print results
-    print("Time taken: ", duration)
+    print(f"Time taken: {duration} seconds")
     print("Number of comparisons: ", comparisons)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
 
 
