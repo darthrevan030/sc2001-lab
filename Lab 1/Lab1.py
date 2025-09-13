@@ -100,7 +100,7 @@ def main():
     plt.xscale('log')
     plt.xlabel('Input Size (log scale)')
     plt.ylabel('Time (seconds)')
-    plt.title('Hybrid Sort Time Complexity')
+    plt.title('Hybrid Sort Time Taken')
     plt.grid(True)
     plt.show()
 
