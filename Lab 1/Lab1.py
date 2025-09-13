@@ -17,11 +17,11 @@ def insertionSort(arr: list[int], left: int, right: int) -> None:
         j = i -1
         while j >= left and arr[j] > key:
             comparisons += 1
-            arr[j + 1] = arr[j]
+            arr[j + 1] = key
             j -= 1
-        if j > key:
+        if j >= left:
             comparisons += 1
-        arr[j + 1] = arr[j]
+        arr[j + 1] = key
         
 
 def merge(arr: list[int], left: int, mid: int, right: int) -> None:
@@ -63,7 +63,7 @@ def hybridSort(arr, left, right, s):
     if size <= s:
         insertionSort(arr, left, right)
     else:
-        mid = left + (right- left) // 2
+        mid = left + (right - left) // 2
         hybridSort(arr, left, mid, s)
         hybridSort(arr, mid+1, right, s)
         merge(arr, left, mid, right)
