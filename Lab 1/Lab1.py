@@ -57,7 +57,16 @@ def merge(arr: list[int], left: int, mid: int, right: int) -> None:
         k += 1
 
 def hybridSort(arr, left, right, s):
-    pass
+    if left >= right:
+        return
+    size = right - left + 1
+    if size <= s:
+        insertionSort(arr, left, right)
+    else:
+        mid = left + (right- left) // 2
+        hybridSort(arr, left, mid, s)
+        hybridSort(arr, mid+1, right, s)
+        merge(arr, left, mid, right)
 
 def main():
 
@@ -81,8 +90,7 @@ def main():
     start = time.perf_counter()
 
     # call hybrid sort algorithm
-    # hybridSort(arr, 0, len(arr)-1, 2)
-    insertionSort(arr, 0, len(arr)-1)
+    hybridSort(arr, 0, len(arr)-1, 2)
 
     # stop tracking time
     end = time.perf_counter()
