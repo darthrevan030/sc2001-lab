@@ -15,17 +15,14 @@ def insertionSort(arr: list[int], left: int, right: int) -> None:
     for i in range(left + 1, right + 1):
         key = arr[i]
         j = i -1
-
-        while j >= left:
+        while j >= left and arr[j] > key:
             comparisons += 1
-
-            if arr[j] <= key:
-                break
-
             arr[j + 1] = arr[j]
             j -= 1
+        if j > key:
+            comparisons += 1
+        arr[j + 1] = arr[j]
         
-        arr[j + 1] = key
 
 def merge(arr: list[int], left: int, mid: int, right: int) -> None:
     # global comparisons variable -> track comparisons across the sorting algorithms
@@ -34,11 +31,9 @@ def merge(arr: list[int], left: int, mid: int, right: int) -> None:
     # create temporary arrays for left and right subarrays
     leftArr = arr[left:mid + 1]
     rightArr = arr[mid + 1: right + 1]
+    i, j, k,  = 0, 0, left # initialise indexes of the left, right and merged subarrays
 
     # merge the temporary arrays back into arr[left...right]
-    i = j = 0 # initialise indexes of the left and right subarrays
-    k = left # initialise index of merged subarray
-
     while i < len(leftArr) and j < len(rightArr):
         comparisons += 1
         if leftArr[i] <= rightArr[j]:
