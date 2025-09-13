@@ -76,7 +76,7 @@ def main():
 
     # Define sizes for plotting (logarithmic scale, clean output)
     sizes = [1000, 5000, 10000, 50000, 100000, 500000, 1000000, 5000000, 10000000]
-    maxVal = 10000
+    maxVal = 100000000000
 
     # Generate input data
     input_data = generateInputData(sizes, maxVal)
