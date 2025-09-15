@@ -119,3 +119,83 @@ if __name__ == "__main__":
     main()
 
 
+# =====================================================
+# Part (d): Compare HybridSort with plain MergeSort
+# =====================================================
+
+def mergeSort(arr: np.ndarray, left: int, right: int) -> int:
+    """Plain MergeSort implementation (baseline for comparison)."""
+    comparisons = 0
+    if left < right:
+        mid = (left + right) // 2
+        comparisons += mergeSort(arr, left, mid)
+        comparisons += mergeSort(arr, mid + 1, right)
+        comparisons += merge(arr, left, mid, right)
+    return comparisons
+
+
+def run_part_d():
+    # Use a smaller set of input sizes first to avoid long runtimes
+    sizes = [1000, 5000, 10000, 50000, 100000]
+    maxVal = 1000000
+    S_OPT = 10   # replace with the team’s chosen optimal S from Part (c)
+
+    # Generate random test arrays
+    input_data = generateInputData(sizes, maxVal)
+
+    # Store results for plotting
+    hybrid_times, hybrid_comps = [], []
+    merge_times, merge_comps = [], []
+
+    for arr in input_data:
+        n = len(arr)
+
+        # Run HybridSort
+        arr_copy1 = arr.copy()
+        start = time.perf_counter()
+        comps_h = hybridSort(arr_copy1, 0, n-1, S_OPT)
+        end = time.perf_counter()
+        hybrid_times.append(end - start)
+        hybrid_comps.append(comps_h)
+
+        # Run plain MergeSort
+        arr_copy2 = arr.copy()
+        start = time.perf_counter()
+        comps_m = mergeSort(arr_copy2, 0, n-1)
+        end = time.perf_counter()
+        merge_times.append(end - start)
+        merge_comps.append(comps_m)
+
+        # Print a quick comparison for each size
+        print(f"Size: {n}")
+        print(f"  Hybrid: {hybrid_times[-1]:.6f}s, {comps_h} comparisons")
+        print(f"  Merge : {merge_times[-1]:.6f}s, {comps_m} comparisons")
+
+    # Plot time comparison
+    plt.figure(figsize=(10,6))
+    plt.plot(sizes, hybrid_times, marker='o', label='HybridSort')
+    plt.plot(sizes, merge_times, marker='s', label='MergeSort')
+    plt.xscale('log')
+    plt.xlabel('Input Size (log scale)')
+    plt.ylabel('Time (seconds)')
+    plt.title('HybridSort vs MergeSort: Time')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    # Plot comparisons comparison
+    plt.figure(figsize=(10,6))
+    plt.plot(sizes, hybrid_comps, marker='o', label='HybridSort')
+    plt.plot(sizes, merge_comps, marker='s', label='MergeSort')
+    plt.xscale('log')
+    plt.xlabel('Input Size (log scale)')
+    plt.ylabel('Comparisons')
+    plt.title('HybridSort vs MergeSort: Comparisons')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()         # runs the existing Part (a–c) code
+    run_part_d()   # also run Part (d) comparison
