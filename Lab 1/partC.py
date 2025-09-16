@@ -7,11 +7,12 @@ import numpy as np
 def generateRandomArray(size: int, maxVal: int) -> np.ndarray:
     return np.random.randint(1, maxVal + 1, size, dtype=np.int64)
 
-def generateInputData(sizes: list[int], maxVal: int) -> list[np.ndarray]:
-    inputData = []
-    for size in sizes:
-        inputData.append(generateRandomArray(size, maxVal))
-    return inputData
+# unused function
+# def generateInputData(sizes: list[int], maxVal: int) -> list[np.ndarray]:
+#     inputData = []
+#     for size in sizes:
+#         inputData.append(generateRandomArray(size, maxVal))
+#     return inputData
 
 def generateConsistentDatasets():
     print("Generating consistent datasets for all experiments...")
@@ -23,8 +24,8 @@ def generateConsistentDatasets():
     datasets = {}
     
     # Different sizes we'll test
-    sizes = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000]
-    maxVal = 1000000
+    sizes = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000]
+    maxVal = 10000000
     
     for size in sizes:
         datasets[size] = generateRandomArray(size, maxVal)
@@ -35,8 +36,8 @@ def generateConsistentDatasets():
         datasets[50000] = generateRandomArray(50000, maxVal)
     
     # Special dataset for final comparison (10M elements)
-    print("  Generating large dataset (10M elements)...")
-    datasets[10000000] = generateRandomArray(10000000, maxVal)
+    if 10000000 not in datasets:
+        datasets[10000000] = generateRandomArray(10000000, maxVal)
     
     print("All datasets generated!\n")
     return datasets
@@ -262,15 +263,14 @@ def findOptimalS(datasets):
     
     return sizes, optimalSVal
 
-def compareWithMergeSort(optimalS: int):
+def compareWithMergeSort(datasets, optimalS: int):
     """Part (d): Compare hybrid sort with original merge sort"""
     print("=== Comparison with Original Merge Sort (n=10M) ===")
     
     size = 10000000  # 10 million
-    maxVal = 1000000
     
-    print(f"Generating array of size {size:,}...")
-    arr = generateRandomArray(size, maxVal)
+    print(f"Using pre-generated array of size {size:,}")
+    arr = datasets[size]
     
     # Test hybrid sort
     print("Running Hybrid Sort...")
@@ -317,7 +317,7 @@ def main():
         
         # Part (d): Compare with original merge sort
         print("\n4. Comparing with original merge sort...")
-        compareWithMergeSort(optimalS)
+        compareWithMergeSort(datasets, optimalS)
         
         print("\nAll experiments completed successfully!")
         
