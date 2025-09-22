@@ -177,7 +177,7 @@ def analyzeFixedN(datasets):
     print("=== Analysis with Fixed Input Size (n=50000), Varying S Values ===")
     
     nFixed = 50000
-    sVal = list(range(1, 51, 2))  # S from 1 to 50, step 2
+    sVal = list(range(1, 101))  # S from 1 to 100
     maxVal = 1000000
     
     # Use the same pre-generated array for all S tests
@@ -230,7 +230,7 @@ def findOptimalS(datasets):
     print("=== Finding Optimal S for Different Input Sizes ===")
     
     sizes = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000]
-    sRange = list(range(5, 101, 5))  # S from 5 to 100, step 5
+    sRange = list(range(5, 101))  # S from 5 to 100
     maxVal = 1000000
     
     optimalSVal = []
