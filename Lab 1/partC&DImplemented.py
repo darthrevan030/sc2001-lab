@@ -2,17 +2,16 @@ import random
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
+# Create output directory for saving graphs
+OUTPUT_DIR = "output"
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+    print(f"Created output directory: {OUTPUT_DIR}")
 
 def generateRandomArray(size: int, maxVal: int) -> np.ndarray:
     return np.random.randint(1, maxVal + 1, size, dtype=np.int64)
-
-# unused function
-# def generateInputData(sizes: list[int], maxVal: int) -> list[np.ndarray]:
-#     inputData = []
-#     for size in sizes:
-#         inputData.append(generateRandomArray(size, maxVal))
-#     return inputData
 
 def generateConsistentDatasets():
     print("Generating consistent datasets for all experiments...")
@@ -168,6 +167,12 @@ def analyzeFixedS(datasets):
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
+
+    # Save the graph
+    output_path = os.path.join(OUTPUT_DIR, "fixed_s_analysis.png")
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"Graph saved to: {output_path}")
+
     plt.show()
     
     return sizeResults, comparisonResults, timeResults
@@ -216,6 +221,12 @@ def analyzeFixedN(datasets):
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
+
+    # Save the graph
+    output_path = os.path.join(OUTPUT_DIR, "fixed_n_analysis.png")
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"Graph saved to: {output_path}")
+
     plt.show()
     
     # Find optimal S
@@ -231,7 +242,6 @@ def findOptimalS(datasets):
     
     sizes = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000]
     sRange = list(range(5, 101))  # S from 5 to 100
-    maxVal = 1000000
     
     optimalSVal = []
     
@@ -259,6 +269,11 @@ def findOptimalS(datasets):
     plt.ylabel('Optimal Threshold (S)')
     plt.title('Optimal S vs Input Size')
     plt.grid(True, alpha=0.3)
+
+    output_path = os.path.join(OUTPUT_DIR, "optimal_s_analysis.png")
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"Graph saved to: {output_path}")
+
     plt.show()
     
     return sizes, optimalSVal
@@ -295,7 +310,45 @@ def compareWithMergeSort(datasets, optimalS: int):
     timeImprovement = ((mergeTime - hybridTime) / mergeTime) * 100
     print(f"  Comparisons reduced by: {comparisonImprovement:.2f}%")
     print(f"  Time reduced by: {timeImprovement:.2f}%")
+
+    # Create comparison chart
+    plt.figure(figsize=(12, 5))
     
+    algorithms = ['Hybrid Sort', 'Merge Sort']
+    comparisons_data = [hybridComparisons, mergeComparisons]
+    times_data = [hybridTime, mergeTime]
+    
+    plt.subplot(1, 2, 1)
+    bars1 = plt.bar(algorithms, comparisons_data, color=['skyblue', 'lightcoral'])
+    plt.ylabel('Number of Comparisons')
+    plt.title(f'Comparisons: Hybrid (S={optimalS}) vs Merge Sort')
+    plt.grid(True, alpha=0.3, axis='y')
+    
+    # Add value labels on bars
+    for bar, value in zip(bars1, comparisons_data):
+        plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(comparisons_data)*0.01,
+                f'{value:,}', ha='center', va='bottom')
+    
+    plt.subplot(1, 2, 2)
+    bars2 = plt.bar(algorithms, times_data, color=['skyblue', 'lightcoral'])
+    plt.ylabel('Time (seconds)')
+    plt.title(f'Time: Hybrid (S={optimalS}) vs Merge Sort')
+    plt.grid(True, alpha=0.3, axis='y')
+    
+    # Add value labels on bars
+    for bar, value in zip(bars2, times_data):
+        plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(times_data)*0.01,
+                f'{value:.3f}s', ha='center', va='bottom')
+    
+    plt.tight_layout()
+    
+    # Save the comparison graph
+    output_path = os.path.join(OUTPUT_DIR, "hybrid_vs_mergesort_comparison.png")
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"Comparison graph saved to: {output_path}")
+    
+    plt.show()
+
     return hybridComparisons, hybridTime, mergeComparisons, mergeTime
 
 def main():
