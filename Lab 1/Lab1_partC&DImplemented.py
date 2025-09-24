@@ -244,6 +244,7 @@ def findOptimalS(datasets):
     sRange = list(range(5, 101))  # S from 5 to 100
     
     optimalSVal = []
+    allRunTimeData = {}
     
     for size in sizes:
         print(f"Finding optimal S for size: {size}")
@@ -251,16 +252,44 @@ def findOptimalS(datasets):
         
         bestTime = float('inf')
         bestS = None
+        sizeRunTimes = []
         
         for s in sRange:
             _, timeTaken = runExperiment(arr, "hybrid", s)
+            sizeRunTimes.append(timeTaken)
             
             if timeTaken < bestTime:
                 bestTime = timeTaken
                 bestS = s
         
         optimalSVal.append(bestS)
+        allRunTimeData[size] = sizeRunTimes
         print(f"  Optimal S: {bestS}, Best time: {bestTime:.6f}s")
+
+    
+    analysis_sizes = [5000, 10000, 25000, 50000, 100000]
+    
+    plt.figure(figsize=(15, 6))
+    colors = ['blue', 'orange', 'green', 'red', 'purple']
+    
+    # Plot: Runtime vs S for different sizes
+    plt.subplot(1, 2, 1)
+    
+    for i, size in enumerate(analysis_sizes):
+        if size in allRunTimeData:
+            plt.plot(sRange, allRunTimeData[size], 
+                    marker='o', linewidth=2, markersize=6,
+                    color=colors[i], label=f'n={size}')
+    
+    plt.xlabel('Threshold S')
+    plt.ylabel('Runtime (seconds)')
+    plt.title('Runtime vs S for different n')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+
+    output_path = os.path.join(OUTPUT_DIR, "runtime_s_analysis_for_different_n.png")
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    print(f"Graph saved to: {output_path}")
     
     # Plot optimal S vs input size
     plt.figure(figsize=(8, 6))
